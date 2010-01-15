@@ -1,4 +1,6 @@
 import glob
+import logging
+from optparse import OptionParser
 import os
 import sys
 
@@ -27,10 +29,17 @@ class SyntaxInstance(object):
 def main(argv=None):
     if argv is None:
         argv = sys.argv
+    opt_parser = OptionParser(usage="%prog [options]")
+    opt_parser.add_option('-s', '--format-specs', dest='format_specs_dir',
+            default="format_specs", help="path to syntax example sets")
+    options, args = opt_parser.parse_args(argv[1:])
+
     formats = {}
-    format_specs_dir = argv[1]
-    syntax_fnames = glob.glob(os.path.join(format_specs_dir, '*', '*.syntax'))
+    syntax_fnames = glob.glob(os.path.join(options.format_specs_dir, '*', '*.syntax'))
+    if len(syntax_fnames) == 0:
+        logging.warning("No syntax files found at '%s'"%(options.format_specs_dir,))
     for fname in syntax_fnames:
+        logging.info("Processing syntax file '%s'"%(fname,))
         path, basename = os.path.split(fname)
         _, syntax_name = os.path.split(path)
         with open(fname, 'r') as f:

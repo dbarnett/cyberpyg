@@ -1,0 +1,15 @@
+3,5 3,12 1
+4,5 4,20 1
+---
+list: 
+  - a 
+  - 'string'
+  - "another string"
+  - b's
+  - c:
+      d: e
+  - f's
+  - g32h
+  - i[j]
+  - k*l
+  - string is true

@@ -26,7 +26,6 @@ def main(argv=None):
                             int(tokencode)))
             syntax_text = ''.join(f)
             format_spec.append({'spans': spans, 'text': syntax_text})
-    import pdb; pdb.set_trace()
     return 0
 
 if __name__ == '__main__':

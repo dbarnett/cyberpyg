@@ -1,7 +1,7 @@
-RoboPyg
+CyberPyg
 =======
 
-RoboPyg wants to highlight your syntax. It's designed to be a flexible syntax
+CyberPyg wants to highlight your syntax. It's designed to be a flexible syntax
 highlighting / lexing framework that learns by example. Feed it pre-highlighted
 syntax, and it will guess how to highlight more of the same syntax. No more
 writing arcane spec files to configure syntax highlighting for your new file
@@ -11,7 +11,7 @@ About
 -----
 
 * Author:       David Barnett <davidbarnett2@gmail.com>
-* Home:         http://github.com/dbarnett/robopyg
+* Home:         http://github.com/dbarnett/cyberpyg
 * License:      BSD
 
 Why?

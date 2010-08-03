@@ -19,3 +19,7 @@ Why?
 
 * Because it's cool
 * Syntax highlighting is great, but writing lexers sucks
+* It seems like a nice self-contained (but virtually impossible) challenge
+* I believe the future of software development is in having software understand
+    and write software, and I'm hoping to learn some tricks that will generalize
+    into even harder problems

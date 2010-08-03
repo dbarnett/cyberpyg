@@ -16,7 +16,7 @@ class SyntaxInstance(object):
             end_col, end_row = map(int, end.split(','))
             spans.append(((start_col, start_row),
                         (end_col, end_row),
-                        int(tokencode)))
+                        tokencode))
         syntax_text = '\n'.join(list(it))
         return cls(syntax_text, spans)
 

@@ -16,7 +16,12 @@ About
 
 What does it do?
 ----------------
-The main goal of CyberPyg itself is just to grok syntax by example. It will understand a syntax on a lexer level, not a parser level, which means it will know enough about the syntax to do syntax highlighting. However, actually highlighting syntax is a secondary goal. It could just as well generate lex files or a pygments lexer, do pass-fail checks on files for syntax errors, or even help update a file from one syntax version to another.
+The main goal of CyberPyg itself is just to grok syntax by example. It will
+understand a syntax on a lexer level, not a parser level, which means it will
+know enough about the syntax to do syntax highlighting. However, actually
+highlighting syntax is a secondary goal. It could just as well generate lex
+files or a pygments lexer, do pass-fail checks on files for syntax errors, or
+even help update a file from one syntax version to another.
 
 Why?
 ----

@@ -4,6 +4,11 @@ from optparse import OptionParser
 import os
 import sys
 
+import colorama
+
+default_color_order = ['RED', 'BLUE', 'CYAN', 'MAGENTA', 'GREEN', 'YELLOW']
+default_colors = [getattr(colorama.Fore, c, '') for c in default_color_order]
+
 class SyntaxInstance(object):
     __file__ = None
 
@@ -35,6 +40,31 @@ class SyntaxInstance(object):
         self.text = text
         self.spans = spans
 
+    def linear_spans(self):
+        lin_index = lambda row, col: sum(len(r)+len('\n') for r in self.text.splitlines()[:row-1]) + col - 1
+        return ((lin_index(*s), lin_index(*e)+1, tok_t) for (s, e, tok_t) in self.spans)
+
+    def iterspans(self):
+        last_end = 0
+        # sorts earliest first, shortest first, then alphabetical by token
+        for (s, e, tok_t) in sorted(self.linear_spans()):
+            if last_end < s:
+                yield (last_end, s, None)
+            yield (max(last_end, s), e, tok_t)
+            last_end = e
+        if last_end < len(self.text):
+            yield (last_end, len(self.text), None)
+
+    def itertokens(self):
+        for (s, e, tok_t) in self.iterspans():
+            yield (self.text[s:e], tok_t)
+
+    def text_with_colors(self):
+        token_types = sorted(set(tok_t for (s, e, tok_t) in self.spans))
+        token_colors = dict(zip(token_types, default_colors))
+        for (text, tok_t) in self.itertokens():
+            yield (text, token_colors.get(tok_t, ''))
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -61,8 +91,13 @@ def main(argv=None):
         _, syntax_name = os.path.split(path)
         format_syntaxes = formats[syntax_name]
         syntaxes = [s for s in format_syntaxes if s.__file__ == os.path.abspath(full_path)]
+        first = True
         for syntax in syntaxes:
-            print syntax.text.rstrip('\n')
+            if not first:
+                sys.stdout.write('\n')
+            first = False
+            for (text, color) in syntax.text_with_colors():
+                sys.stdout.write(color + text + colorama.Style.RESET_ALL)
 
     return 0
 

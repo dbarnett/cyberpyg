@@ -20,7 +20,7 @@ class SyntaxInstance(object):
         for line in it:
             if line == '---':
                 break
-            start, end, tokencode = line.split(' ')
+            start, end, tokencode = line.split(None, 2)
             start_col, start_row = map(int, start.split(','))
             end_col, end_row = map(int, end.split(','))
             spans.append(((start_col, start_row),

@@ -72,7 +72,10 @@ def main(argv=None):
     opt_parser.add_option('-s', '--format-specs', dest='format_specs_dir',
             default="format_specs", help="path to syntax example sets")
     options, args = opt_parser.parse_args(argv[1:])
-    command = args[0]
+    command = (args[0] if len(args) > 0 else None)
+    if command is None:
+        opt_parser.print_help()
+        return 1
 
     formats = {}
     syntax_fnames = glob.glob(os.path.join(options.format_specs_dir, '*', '*.syntax'))

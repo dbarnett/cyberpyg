@@ -5,65 +5,11 @@ import os
 import sys
 
 import colorama
+from .syntax import SyntaxInstance
+from .grokkers import DumbRegexGrokker
 
 default_color_order = ['RED', 'BLUE', 'CYAN', 'MAGENTA', 'GREEN', 'YELLOW']
 default_colors = [getattr(colorama.Fore, c, '') for c in default_color_order]
-
-class SyntaxInstance(object):
-    __file__ = None
-
-    @classmethod
-    def from_special_string(cls, syntax_string):
-        spans = []
-        syntax_string_lines = syntax_string.split('\n')
-        it = iter(syntax_string_lines)
-        for line in it:
-            if line == '---':
-                break
-            start, end, tokencode = line.split(None, 2)
-            start_col, start_row = map(int, start.split(','))
-            end_col, end_row = map(int, end.split(','))
-            spans.append(((start_col, start_row),
-                        (end_col, end_row),
-                        tokencode))
-        syntax_text = '\n'.join(list(it))
-        return cls(syntax_text, spans)
-
-    @classmethod
-    def from_file(cls, fname):
-        with open(fname, 'r') as f:
-            syntax_inst = cls.from_special_string(f.read())
-        syntax_inst.__file__ = os.path.abspath(fname)
-        return syntax_inst
-
-    def __init__(self, text, spans):
-        self.text = text
-        self.spans = spans
-
-    def linear_spans(self):
-        lin_index = lambda row, col: sum(len(r)+len('\n') for r in self.text.splitlines()[:row-1]) + col - 1
-        return ((lin_index(*s), lin_index(*e)+1, tok_t) for (s, e, tok_t) in self.spans)
-
-    def iterspans(self):
-        last_end = 0
-        # sorts earliest first, shortest first, then alphabetical by token
-        for (s, e, tok_t) in sorted(self.linear_spans()):
-            if last_end < s:
-                yield (last_end, s, None)
-            yield (max(last_end, s), e, tok_t)
-            last_end = e
-        if last_end < len(self.text):
-            yield (last_end, len(self.text), None)
-
-    def itertokens(self):
-        for (s, e, tok_t) in self.iterspans():
-            yield (self.text[s:e], tok_t)
-
-    def text_with_colors(self):
-        token_types = sorted(set(tok_t for (s, e, tok_t) in self.spans))
-        token_colors = dict(zip(token_types, default_colors))
-        for (text, tok_t) in self.itertokens():
-            yield (text, token_colors.get(tok_t, ''))
 
 def main(argv=None):
     if argv is None:
@@ -104,18 +50,11 @@ def main(argv=None):
     if command == 'pygments':
         format_name = args[1]
         syntax_instances = formats[format_name]
-        tok_instances = {}
-        for s_instance in syntax_instances:
-            for tok_text, tok_type in s_instance.itertokens():
-                tok_instances.setdefault(tok_type, []).append(tok_text)
-        tok_regexes = {}
-        for tok_type, tok_texts in tok_instances.items():
-            tok_chars = set(c for c in ''.join(tok_texts))
-            if any(tok_chars&set(c for c in ''.join(tok2_texts)) for (tok2_type, tok2_texts) in tok_instances.items() if tok2_type != tok_type):
-                raise Exception("Not smart enough")
-            tok_regex = '['+''.join('\\'+t if t in r'[]\^$.|?*+()' else t for t in tok_chars)+']+'
-            if tok_type is not None:
-                tok_regexes[tok_type] = tok_regex
+        guesses = DumbRegexGrokker().grok(syntax_instances)
+        if len(guesses) == 0:
+            print >>sys.stderr, "Failed to grok syntax"
+            return 2
+        tok_regexes = guesses[0]
         print """from pygments.lexer import RegexLexer
 from pygments.token import *
 

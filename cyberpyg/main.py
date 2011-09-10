@@ -101,5 +101,30 @@ def main(argv=None):
             first = False
             for (text, color) in syntax.text_with_colors():
                 sys.stdout.write(color + text + colorama.Style.RESET_ALL)
+    if command == 'pygments':
+        format_name = args[1]
+        syntax_instances = formats[format_name]
+        tok_instances = {}
+        for s_instance in syntax_instances:
+            for tok_text, tok_type in s_instance.itertokens():
+                tok_instances.setdefault(tok_type, []).append(tok_text)
+        tok_regexes = {}
+        for tok_type, tok_texts in tok_instances.items():
+            tok_chars = set(c for c in ''.join(tok_texts))
+            if any(tok_chars&set(c for c in ''.join(tok2_texts)) for (tok2_type, tok2_texts) in tok_instances.items() if tok2_type != tok_type):
+                raise Exception("Not smart enough")
+            tok_regex = '['+''.join('\\'+t if t in r'[]\^$.|?*+()' else t for t in tok_chars)+']+'
+            if tok_type is not None:
+                tok_regexes[tok_type] = tok_regex
+        print """from pygments.lexer import RegexLexer
+from pygments.token import *
+
+class %(format_name)s_Lexer(RegexLexer):
+    tokens = {
+        'root': [%(tok_tuples)s
+        ]
+    }"""%{'format_name': format_name,
+        'tok_tuples': '\n            '.join('(%r, Token.%s),'%(tok_regex, tok_type[:1].upper()+tok_type[1:]) for (tok_type, tok_regex) in tok_regexes.items())
+    }
 
     return 0

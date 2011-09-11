@@ -6,7 +6,7 @@ import sys
 
 import colorama
 from .syntax import SyntaxInstance
-from .grokkers import DumbRegexGrokker
+from .grokkers import StatefulRegexGrokker
 
 default_color_order = ['RED', 'BLUE', 'CYAN', 'MAGENTA', 'GREEN', 'YELLOW']
 default_colors = [getattr(colorama.Fore, c, '') for c in default_color_order]
@@ -50,20 +50,24 @@ def main(argv=None):
     if command == 'pygments':
         format_name = args[1]
         syntax_instances = formats[format_name]
-        guesses = DumbRegexGrokker().grok(syntax_instances)
+        guesses = StatefulRegexGrokker().grok(syntax_instances)
         if len(guesses) == 0:
             print >>sys.stderr, "Failed to grok syntax"
             return 2
         tok_regexes = guesses[0]
+        import pygments.token
+        pyg_tokens = {}
+        for s, s_rules in tok_regexes.items():
+            pyg_tokens.setdefault(s, [])
+            for s_rule in s_rules:
+                tok_type = s_rule[1]
+                pyg_tokens[s].append((s_rule[0], pygments.token.string_to_tokentype(tok_type[:1].upper()+tok_type[1:])) + s_rule[2:])
         print """from pygments.lexer import RegexLexer
 from pygments.token import *
 
 class %(format_name)s_Lexer(RegexLexer):
-    tokens = {
-        'root': [%(tok_tuples)s
-        ]
-    }"""%{'format_name': format_name,
-        'tok_tuples': '\n            '.join('(%r, Token.%s),'%(tok_regex, tok_type[:1].upper()+tok_type[1:]) for (tok_type, tok_regex) in tok_regexes.items())
+    tokens = %(lexer_dict)r"""%{'format_name': format_name,
+        'lexer_dict': pyg_tokens
     }
 
     return 0

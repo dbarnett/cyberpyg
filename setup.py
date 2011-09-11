@@ -5,7 +5,7 @@ setup(
     version = "0.09",
     packages=find_packages(),
     dependency_links = [],
-    install_requires=['colorama'],
+    install_requires=['colorama', 'pygments'],
     extras_require={},
     package_data = {},
     author="David Barnett",

@@ -31,6 +31,12 @@ class CyberTok(object):
 
 SkippedToken = pygments.token.Token.CyberPyg.SkippedToken
 
+class Mu(object):
+    pass
+
+class LikelyStatePopError(Exception):
+    pass
+
 class StatefulRegexGrokker(BaseGrokker):
     """Represents a model for syntax like pygments.lexers.RegexLexer"""
     @staticmethod
@@ -44,7 +50,16 @@ class StatefulRegexGrokker(BaseGrokker):
             pyg_tokens[s].append(('.', SkippedToken))
         class _Lexer(pygments.lexer.RegexLexer):
             tokens = pyg_tokens
-        return _Lexer().get_tokens(text)
+        toks = _Lexer().get_tokens(text)
+        def fix_pop_errors():
+            try:
+                while True:
+                    yield toks.next()
+            except IndexError, e:
+                raise LikelyStatePopError()
+            except StopIteration, e:
+                pass
+        return fix_pop_errors()
 
     @staticmethod
     def _coiterate_tokens(cyber_toks, pygments_toks):
@@ -73,22 +88,39 @@ class StatefulRegexGrokker(BaseGrokker):
             lexer_guess = bfs.pop(0)
             lexer_inconsistent = False
             for syntax_instance in syntax_instances:
-                for ((cyb_tok_t, pyg_tok_t), tok_str) in self._coiterate_tokens(syntax_instance.itertokens(), self._apply_lexer(lexer_guess, syntax_instance.text)):
-                    if cyb_tok_t is None:
-                        if pyg_tok_t is not SkippedToken:       # false positive
-                            if ((cyb_tok_t, pyg_tok_t), tok_str) != ((None, pygments.token.Token.Text), '\n'):
-                                lexer_inconsistent = True
-                    elif pyg_tok_t is SkippedToken:     # false negative
-                        tok_regex = '['+''.join('\\'+t if t in r'[]\^$.|?*+()' else t for t in sorted(set(tok_str)))+']'
-                        new_lexer_guess = dict([(s_name, rules[:]) for (s_name, rules) in lexer_guess.iteritems()])
-                        assert ((tok_regex, cyb_tok_t) not in new_lexer_guess['root'])
-                        new_lexer_guess['root'].append((tok_regex, cyb_tok_t))
-                        bfs.append(new_lexer_guess)
-                        lexer_inconsistent = True
-                    elif pygments.token.string_to_tokentype(cyb_tok_t[:1].upper()+cyb_tok_t[1:]) is not pyg_tok_t:
-                        lexer_inconsistent = True
-                    if lexer_inconsistent:
-                        break
+                try:
+                    for ((cyb_tok_t, pyg_tok_t), tok_str) in self._coiterate_tokens(syntax_instance.itertokens(), self._apply_lexer(lexer_guess, syntax_instance.text)):
+                        if cyb_tok_t is None:
+                            if pyg_tok_t is not SkippedToken:       # false positive
+                                if ((cyb_tok_t, pyg_tok_t), tok_str) != ((None, pygments.token.Token.Text), '\n'):
+                                    lexer_inconsistent = True
+                        elif pyg_tok_t is SkippedToken:     # false negative
+                            tok_regex = '['+''.join('\\'+t if t in r'[]\^$.|?*+()' else t for t in sorted(set(tok_str)))+']'
+                            def _perm_lexer(lexer):
+                                for state_to_perm in lexer.keys():
+                                    if len(lexer[state_to_perm]) > 0 and lexer[state_to_perm][-1][0] == tok_regex:
+                                        continue
+                                    i = 1
+                                    while 's'+str(i) in lexer.keys():
+                                        i += 1
+                                    for new_push_state in [Mu, 's'+str(i), '#pop', '#push']:
+                                        new_lexer_guess = dict([(s_name, s_rules[:]) for (s_name, s_rules) in lexer.iteritems()])
+                                        if new_push_state == Mu:
+                                            pattern_to_append = (tok_regex, cyb_tok_t)
+                                        else:
+                                            if not new_push_state.startswith('#'):
+                                                new_lexer_guess[new_push_state] = []
+                                            pattern_to_append = (tok_regex, cyb_tok_t, new_push_state)
+                                        new_lexer_guess[state_to_perm].append(pattern_to_append)
+                                        yield new_lexer_guess
+                            bfs.extend(_perm_lexer(lexer_guess))
+                            lexer_inconsistent = True
+                        elif pygments.token.string_to_tokentype(cyb_tok_t[:1].upper()+cyb_tok_t[1:]) is not pyg_tok_t:
+                            lexer_inconsistent = True
+                        if lexer_inconsistent:
+                            break
+                except LikelyStatePopError, e:
+                    lexer_inconsistent = True
                 if lexer_inconsistent:
                     break
             if not lexer_inconsistent:

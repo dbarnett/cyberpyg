@@ -8,9 +8,6 @@ import colorama
 from .syntax import SyntaxInstance
 from .grokkers import StatefulRegexGrokker
 
-default_color_order = ['RED', 'BLUE', 'CYAN', 'MAGENTA', 'GREEN', 'YELLOW']
-default_colors = [getattr(colorama.Fore, c, '') for c in default_color_order]
-
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -46,7 +43,7 @@ def main(argv=None):
                 sys.stdout.write('\n')
             first = False
             for (text, color) in syntax.text_with_colors():
-                sys.stdout.write(color + text + colorama.Style.RESET_ALL)
+                sys.stdout.write(getattr(colorama.Fore, color, '') + text + colorama.Style.RESET_ALL)
     if command == 'pygments':
         format_name = args[1]
         syntax_instances = formats[format_name]

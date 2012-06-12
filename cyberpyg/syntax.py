@@ -1,5 +1,7 @@
 import os
 
+default_colors = ['RED', 'BLUE', 'CYAN', 'MAGENTA', 'GREEN', 'YELLOW']
+
 class SyntaxInstance(object):
     __file__ = None
 

@@ -4,6 +4,8 @@
 dbarnett/cyberpyg is built on the following main stack:
 
 - [Python](https://www.python.org) – Languages
+- [LangChain](https://github.com/hwchase17/langchain) – Large Language Model Tools
+- [pgvector](https://github.com/pgvector/pgvector/) – Database Tools
 
 Full tech stack [here](/techstack.md)
 
@@ -14,6 +16,8 @@ Full tech stack [here](/techstack.md)
 dbarnett/cyberpyg is built on the following main stack:
 
 - <img width='25' height='25' src='https://img.stackshare.io/service/993/pUBY5pVj.png' alt='Python'/> [Python](https://www.python.org) – Languages
+- <img width='25' height='25' src='https://img.stackshare.io/service/48790/default_5b6c6b73f1ff3775c85d2a1ba954cb87e30cbf13.jpg' alt='LangChain'/> [LangChain](https://github.com/hwchase17/langchain) – Large Language Model Tools
+- <img width='25' height='25' src='https://img.stackshare.io/service/109221/default_b888cdf5617d936aa6aacf130911906955508639.png' alt='pgvector'/> [pgvector](https://github.com/pgvector/pgvector/) – Database Tools
 
 Full tech stack [here](/techstack.md)
 
@@ -24,7 +28,7 @@ Full tech stack [here](/techstack.md)
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [dbarnett/cyberpyg](https://github.com/dbarnett/cyberpyg)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|4<br/>Tools used|11/26/23 <br/>Report generated|
+|7<br/>Tools used|12/14/23 <br/>Report generated|
 |------|------|
 </div>
 
@@ -34,6 +38,19 @@ Full tech stack [here](/techstack.md)
   <img width='36' height='36' src='https://img.stackshare.io/service/993/pUBY5pVj.png' alt='Python'>
   <br>
   <sub><a href="https://www.python.org">Python</a></sub>
+  <br>
+  <sub></sub>
+</td>
+
+</tr>
+</table>
+
+## <img src='https://img.stackshare.io/databases.svg'/> Data (1)
+<table><tr>
+  <td align='center'>
+  <img width='36' height='36' src='https://img.stackshare.io/service/109221/default_b888cdf5617d936aa6aacf130911906955508639.png' alt='pgvector'>
+  <br>
+  <sub><a href="https://github.com/pgvector/pgvector/">pgvector</a></sub>
   <br>
   <sub></sub>
 </td>
@@ -62,14 +79,28 @@ Full tech stack [here](/techstack.md)
 </tr>
 </table>
 
+## Other (1)
+<table><tr>
+  <td align='center'>
+  <img width='36' height='36' src='https://img.stackshare.io/service/48790/default_5b6c6b73f1ff3775c85d2a1ba954cb87e30cbf13.jpg' alt='LangChain'>
+  <br>
+  <sub><a href="https://github.com/hwchase17/langchain">LangChain</a></sub>
+  <br>
+  <sub></sub>
+</td>
 
-## <img src='https://img.stackshare.io/group.svg' /> Open source packages (1)</h2>
+</tr>
+</table>
 
-## <img width='24' height='24' src='https://img.stackshare.io/service/12572/-RIWgodF_400x400.jpg'/> PyPI (1)
+
+## <img src='https://img.stackshare.io/group.svg' /> Open source packages (2)</h2>
+
+## <img width='24' height='24' src='https://img.stackshare.io/service/12572/-RIWgodF_400x400.jpg'/> PyPI (2)
 
 |NAME|VERSION|LAST UPDATED|LAST UPDATED BY|LICENSE|VULNERABILITIES|
 |:------|:------|:------|:------|:------|:------|
-|[colorama](https://pypi.org/colorama)|N/A|09/11/11|David Barnett |BSD-3-Clause|N/A|
+|[Pygments](https://pypi.org/project/Pygments)|N/A|09/11/11|David Barnett |BSD-3-Clause|N/A|
+|[colorama](https://pypi.org/project/colorama)|N/A|09/11/11|David Barnett |BSD-3-Clause|N/A|
 
 <br/>
 <div align='center'>

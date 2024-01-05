@@ -1,7 +1,8 @@
 repo_name: dbarnett/cyberpyg
-report_id: 4118b9714a02285a374952309d7cbdef
+report_id: b2f615a1fd79b653167fa0d0fd4043b9
+version: 0.1
 repo_type: Public
-timestamp: '2023-12-14T13:21:50+00:00'
+timestamp: '2024-01-05T08:32:50+00:00'
 requested_by: stacksharebot
 provider: github
 branch: master
@@ -16,6 +17,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/993/pUBY5pVj.png
+  detection_source_url: https://github.com/dbarnett/cyberpyg
   detection_source: Repo Metadata
 - name: pgvector
   description: Open-source vector similarity search for Postgres
@@ -25,6 +27,7 @@ tools:
   category: Data Stores
   sub_category: Database Tools
   image_url: https://img.stackshare.io/service/109221/default_b888cdf5617d936aa6aacf130911906955508639.png
+  detection_source_url: https://github.com/dbarnett/cyberpyg/blob/master/setup.py
   detection_source: setup.py
   last_updated_by: David Barnett
   last_updated_on: 2011-03-13 15:44:41.000000000 Z
@@ -36,6 +39,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/dbarnett/cyberpyg
   detection_source: Repo Metadata
 - name: PyPI
   description: A repository of software for the Python programming language
@@ -45,6 +49,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Hosted Package Repository
   image_url: https://img.stackshare.io/service/12572/-RIWgodF_400x400.jpg
+  detection_source_url: https://github.com/dbarnett/cyberpyg/blob/master/setup.py
   detection_source: setup.py
   last_updated_by: David Barnett
   last_updated_on: 2011-03-13 15:44:41.000000000 Z
@@ -56,6 +61,7 @@ tools:
   category: Communications
   sub_category: Large Language Model Tools
   image_url: https://img.stackshare.io/service/48790/default_5b6c6b73f1ff3775c85d2a1ba954cb87e30cbf13.jpg
+  detection_source_url: https://github.com/dbarnett/cyberpyg/blob/master/setup.py
   detection_source: setup.py
   last_updated_by: David Barnett
   last_updated_on: 2011-03-13 15:44:41.000000000 Z
@@ -68,6 +74,7 @@ tools:
   category: Libraries
   sub_category: PyPI Packages
   image_url: https://img.stackshare.io/package/19858/default_4d761b2257a1435539d6dc92346974d9f1d55c70.png
+  detection_source_url: https://github.com/dbarnett/cyberpyg/blob/master/setup.py
   detection_source: setup.py
   last_updated_by: David Barnett
   last_updated_on: 2011-09-11 21:24:22.000000000 Z
@@ -80,6 +87,7 @@ tools:
   category: Libraries
   sub_category: PyPI Packages
   image_url: https://img.stackshare.io/package/19845/default_accee5d2b8ed75c2245f13504daf75b1cbc8cc9f.png
+  detection_source_url: https://github.com/dbarnett/cyberpyg/blob/master/setup.py
   detection_source: setup.py
   last_updated_by: David Barnett
   last_updated_on: 2011-09-11 21:24:22.000000000 Z
